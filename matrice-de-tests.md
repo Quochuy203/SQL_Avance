@@ -16,11 +16,19 @@ les rôles ne sont pas actifs et tous les tests qui suivent vont échouer pour l
 
 | # | Commande | Attendu | Obtenu |
 |---|---|---|---|
-| 1 | `SELECT id, nom, prenom FROM adherent LIMIT 5;` | OK | |
-| 2 | `SELECT email FROM adherent LIMIT 1;` | refus | |
-| 3 | `UPDATE exemplaire SET disponible = 0 WHERE id = 3;` | OK | |
-| 4 | `UPDATE exemplaire SET etat = 'use' WHERE id = 3;` | refus | |
-| 5 | `DELETE FROM emprunt WHERE id = 1;` | refus | |
+| 1 | `SELECT id, nom, prenom FROM adherent LIMIT 5;` | OK | +----+----------+---------+
+| id | nom      | prenom  |
++----+----------+---------+
+|  1 | Durand   | Antoine |
+|  2 | Garcia   | Zoe     |
+|  3 | Girard   | Tom     |
+|  4 | Francois | Emma    |
+|  5 | Richard  | Paul    |
++----+----------+---------+ |
+| 2 | `SELECT email FROM adherent LIMIT 1;` | refus | ERROR 1143 (42000): SELECT command denied to user 'app_media'@'localhost' for column 'email' in table 'adherent' |
+| 3 | `UPDATE exemplaire SET disponible = 0 WHERE id = 3;` | OK | ERROR 1143 (42000): UPDATE command denied to user 'app_media'@'localhost' for column 'etat' in table 'exemplaire' |
+| 4 | `UPDATE exemplaire SET etat = 'use' WHERE id = 3;` | refus | ERROR 1143 (42000) |
+| 5 | `DELETE FROM emprunt WHERE id = 1;` | refus | ERROR 1142 (42000): DELETE command denied to user 'app_media'@'localhost' for table 'emprunt' |
 
 Les tests 3 et 4 portent sur la **même table** : c'est la colonne qui fait la différence.
 
@@ -28,16 +36,16 @@ Les tests 3 et 4 portent sur la **même table** : c'est la colonne qui fait la d
 
 | # | Commande | Attendu | Obtenu |
 |---|---|---|---|
-| 6 | `SELECT nom, email, telephone FROM adherent LIMIT 3;` | OK | |
-| 7 | `CREATE USER 'test'@'localhost' IDENTIFIED BY 'Test!2026';` | refus | |
+| 6 | `SELECT nom, email, telephone FROM adherent LIMIT 3;` | OK | OK |
+| 7 | `CREATE USER 'test'@'localhost' IDENTIFIED BY 'Test!2026';` | refus | ERROR 1227 (42000): Access denied; you need (at least one of) the CREATE USER privilege(s) for this operation |
 
 ## `stagiaire`
 
 | # | Commande | Attendu | Obtenu |
 |---|---|---|---|
 | 8 | `SELECT nom, prenom, ville FROM adherent LIMIT 5;` | OK | |
-| 9 | `SELECT email FROM adherent LIMIT 1;` | refus | |
-| 10 | `SELECT * FROM adherent LIMIT 1;` | refus | |
+| 9 | `SELECT email FROM adherent LIMIT 1;` | ERROR 1143 | |
+| 10 | `SELECT * FROM adherent LIMIT 1;` | ERROR 1142 | |
 
 **Question :** les tests 9 et 10 échouent tous les deux, mais pas avec le même numéro d'erreur. Pourquoi ?
 
