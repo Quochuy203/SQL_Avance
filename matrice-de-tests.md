@@ -61,8 +61,8 @@ Les tests 3 et 4 portent sur la **même table** : c'est la colonne qui fait la d
 
 | # | Commande | Attendu | Obtenu |
 |---|---|---|---|
-| 11 | `SELECT COUNT(*) FROM adherent;` | refus | |
-| 12 | `SELECT COUNT(*) FROM reservation;` | après le `GRANT` : OK — après le `REVOKE` : refus | |
+| 11 | `SELECT COUNT(*) FROM adherent;` | refus | ERROR 1142 |
+| 12 | `SELECT COUNT(*) FROM reservation;` | après le `GRANT` : OK — après le `REVOKE` : refus | ERROR 1142 |
 
 ## Conclusion
 
