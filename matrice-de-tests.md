@@ -36,7 +36,13 @@ Les tests 3 et 4 portent sur la **même table** : c'est la colonne qui fait la d
 
 | # | Commande | Attendu | Obtenu |
 |---|---|---|---|
-| 6 | `SELECT nom, email, telephone FROM adherent LIMIT 3;` | OK | OK |
+| 6 | `SELECT nom, email, telephone FROM adherent LIMIT 3;` | OK | +--------+---------------------------+----------------+
+| nom    | email                     | telephone      |
++--------+---------------------------+----------------+
+| Durand | antoine.durand@example.fr | 04 78 11 27 33 |
+| Garcia | zoe.garcia@example.fr     | 04 78 12 34 36 |
+| Girard | tom.girard@example.fr     | 04 78 13 41 39 |
++--------+---------------------------+----------------+ |
 | 7 | `CREATE USER 'test'@'localhost' IDENTIFIED BY 'Test!2026';` | refus | ERROR 1227 (42000): Access denied; you need (at least one of) the CREATE USER privilege(s) for this operation |
 
 ## `stagiaire`
@@ -62,4 +68,6 @@ Les tests 3 et 4 portent sur la **même table** : c'est la colonne qui fait la d
 
 Une phrase : **parmi les quatre comptes, lequel peut encore faire quelque chose qu'il ne fera jamais — et comment le lui retireriez-vous ?**
 
->
+> Le compte analyste (ou app_media) peut toujours consulter la liste des œuvres/genres (role_catalogue) ou mettre à jour le statut des livres, mais en réalité, l'analyste statistique n'a besoin que de lire les données statistiques d'emprunt et de retour et ne les modifie jamais. Pour corriger cela, vous pouvez supprimer le rôle inutile à l'aide de la commande :
+
+-> REVOKE role_catalogue FROM 'analyste'@'localhost';
